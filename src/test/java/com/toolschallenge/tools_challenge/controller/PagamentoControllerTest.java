@@ -51,7 +51,7 @@ class PagamentoControllerTest {
         mockMvc.perform(post("/pagamentos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(PagamentoTestHelper.pagamentoValido())))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.transacao.id").value(PagamentoTestHelper.ID_TRANSACAO))
                 .andExpect(jsonPath("$.transacao.descricao.status").value("AUTORIZADO"));
     }

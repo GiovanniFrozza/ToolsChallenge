@@ -33,7 +33,7 @@ class PagamentoIntegrationTest {
     @Test
     void deveExecutarFluxoCompletoDePagamento() throws Exception {
         enviarPagamento(PagamentoTestHelper.pagamentoValido())
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.transacao.descricao.status").value("AUTORIZADO"));
 
         mockMvc.perform(get("/pagamentos/{id}", PagamentoTestHelper.ID_TRANSACAO))
@@ -51,7 +51,7 @@ class PagamentoIntegrationTest {
     @Test
     void deveRetornarConflitoParaIdDuplicado() throws Exception {
         enviarPagamento(PagamentoTestHelper.pagamentoValido())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         enviarPagamento(PagamentoTestHelper.pagamentoValido())
                 .andExpect(status().isConflict());
@@ -60,7 +60,7 @@ class PagamentoIntegrationTest {
     @Test
     void deveNegarPagamentoComValorInvalido() throws Exception {
         enviarPagamento(PagamentoTestHelper.pagamentoComValor(BigDecimal.ZERO))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.transacao.descricao.status").value("NEGADO"));
     }
 

@@ -36,8 +36,8 @@ public final class PagamentoApiDoc {
             )
     )
     @ApiResponse(
-            responseCode = "200",
-            description = "Pagamento processado",
+            responseCode = "201",
+            description = "Pagamento processado e transação criada",
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = PagamentoResponse.class),

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,12 @@ public class PagamentoController {
     @PagamentoApiDoc.CriarPagamento
     @PostMapping
     public ResponseEntity<PagamentoResponse> pagar(@RequestBody PagamentoRequest request) {
-        return ResponseEntity.ok(transacaoService.processarPagamento(request));
+        PagamentoResponse response = transacaoService.processarPagamento(request);
+        var location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(response.getTransacao().getId())
+                .toUri();
+        return ResponseEntity.created(location).body(response);
     }
 
     @PagamentoApiDoc.BuscarPagamento
